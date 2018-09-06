@@ -1,5 +1,9 @@
 # ChangeLog
 
+## [0.6.1-jyutping] (2018-09-06)
+
+Fork pinying-data and patch it to support only Jyutping.
+
 ## [0.6.1] (2018-08-04)
 
 * 修改 `著` 的默认读音为 `zhù`
