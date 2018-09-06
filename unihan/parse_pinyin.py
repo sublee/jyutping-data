@@ -10,28 +10,12 @@ def re_match_pinyin_line(kind):
     )
 
 PINYIN = r'[^\d\.,]+'
-re_khanyupinyin = re.compile(r'''
-    (?:\d{5}\.\d{2}0,)*\d{5}\.\d{2}0:
-    ((?:%(pinyin)s,)*)
-    (%(pinyin)s)
-''' % ({'pinyin': PINYIN}), re.X)
-re_kmandarin = re.compile(r'''
+re_kcantonese = re.compile(r'''
     ()()
     ({pinyin})
 '''.format(pinyin=PINYIN), re.X)
-re_kxhc1983 = re.compile(r'''
-    ()()[0-9]{4}\.[0-9]{3}\*?
-    (?:,[0-9]{4}\.[0-9]{3}\*?)*:
-    (%(pinyin)s)
-''' % ({'pinyin': PINYIN}), re.X)
-re_khanyupinlu = re.compile(r'''
-    ()()({pinyin})\([0-9]+\)
-'''.format(pinyin=PINYIN), re.X)
 re_kinds_map = {
-    'kHanyuPinyin': re_khanyupinyin,
-    'kMandarin': re_kmandarin,
-    'kXHC1983': re_kxhc1983,
-    'kHanyuPinlu': re_khanyupinlu,
+    'kCantonese': re_kcantonese,
 }
 
 
@@ -43,7 +27,7 @@ def remove_dup_items(lst):
     return new_list
 
 
-def parse(lines, kind='kHanyuPinyin', ignore_prefix='#') -> str:
+def parse(lines, kind='kCantonese', ignore_prefix='#') -> str:
     re_line = re_match_pinyin_line(kind)
     re_pinyin = re_kinds_map[kind]
     for line in lines:
@@ -86,8 +70,7 @@ def save_data(pinyins, writer):
 
 if __name__ == '__main__':
     with open('Unihan_Readings.txt') as fp:
-        for kind in ('kHanyuPinyin', 'kMandarin',
-                     'kHanyuPinlu', 'kXHC1983'):
+        for kind in ('kCantonese',):
             fp.seek(0)
             with open('{}.txt'.format(kind), 'w') as writer:
                 pinyins = parse(fp.readlines(), kind=kind)
