@@ -1,4 +1,4 @@
-# version: 0.0.1
+# version: 0.6.1-jyutping
 # source: https://github.com/sublee/jyutping-data
 U+3400: jau  # 㐀
 U+3401: tim  # 㐁
