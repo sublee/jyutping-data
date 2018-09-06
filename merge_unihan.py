@@ -65,53 +65,21 @@ def extend_pinyins(old_map, new_map, only_no_exists=False):
 
 if __name__ == '__main__':
     raw_pinyin_map = {}
-    with open('kHanyuPinyin.txt') as fp:
-        khanyupinyin = parse_pinyins(fp)
-        raw_pinyin_map.update(khanyupinyin)
-    with open('kXHC1983.txt') as fp:
-        kxhc1983 = parse_pinyins(fp)
-        extend_pinyins(raw_pinyin_map, kxhc1983)
-    with open('nonCJKUI.txt') as fp:
-        noncjkui = parse_pinyins(fp)
-        extend_pinyins(raw_pinyin_map, noncjkui)
-    with open('kMandarin_8105.txt') as fp:
-        adjust_pinyin_map = parse_pinyins(fp)
-        extend_pinyins(raw_pinyin_map, adjust_pinyin_map)
-    with open('kMandarin_overwrite.txt') as fp:
-        _map = parse_pinyins(fp)
-        extend_pinyins(adjust_pinyin_map, _map)
-        extend_pinyins(raw_pinyin_map, adjust_pinyin_map)
-    with open('kMandarin.txt') as fp:
-        _map = parse_pinyins(fp)
-        extend_pinyins(adjust_pinyin_map, _map)
-        extend_pinyins(raw_pinyin_map, adjust_pinyin_map)
-    with open('kHanyuPinlu.txt') as fp:
-        khanyupinyinlu = parse_pinyins(fp)
-        # 之所以只增加不存在的拼音数据而不更新已有的数据
-        # 是因为 kHanyuPinlu 的拼音数据中存在一部分不需要的轻声拼音
-        # 以及部分音调标错了位置，比如把 ``ǒu`` 标成了 ``oǔ``
-        extend_pinyins(raw_pinyin_map, khanyupinyinlu, only_no_exists=True)
-    with open('GBK_PUA.txt') as fp:
-        pua_pinyin_map = parse_pinyins(fp)
-        extend_pinyins(raw_pinyin_map, pua_pinyin_map)
+    with open('kCantonese.txt') as fp:
+        kCantonese = parse_pinyins(fp)
+        raw_pinyin_map.update(kCantonese)
 
     with open('overwrite.txt') as fp:
         overwrite_pinyin_map = parse_pinyins(fp)
         extend_pinyins(raw_pinyin_map, overwrite_pinyin_map)
 
-    new_pinyin_map = merge(raw_pinyin_map, adjust_pinyin_map,
-                           overwrite_pinyin_map)
+    new_pinyin_map = merge(raw_pinyin_map, {}, overwrite_pinyin_map)
     new_pinyin_map = sort_pinyin_dict(new_pinyin_map)
 
     assert len(new_pinyin_map) == len(raw_pinyin_map)
     code_set = set(new_pinyin_map.keys())
-    assert set(khanyupinyin.keys()) - code_set == set()
-    assert set(khanyupinyinlu.keys()) - code_set == set()
-    assert set(kxhc1983.keys()) - code_set == set()
-    assert set(adjust_pinyin_map.keys()) - code_set == set()
-    assert set(overwrite_pinyin_map.keys()) - code_set == set()
-    assert set(pua_pinyin_map.keys()) - code_set == set()
-    with open('pinyin.txt', 'w') as fp:
-        fp.write('# version: 0.6.1\n')
-        fp.write('# source: https://github.com/mozillazg/pinyin-data\n')
+    assert set(kCantonese.keys()) - code_set == set()
+    with open('jyutping.txt', 'w') as fp:
+        fp.write('# version: 0.6.1-jyutping\n')
+        fp.write('# source: https://github.com/sublee/jyutping-data\n')
         save_data(new_pinyin_map, fp)
