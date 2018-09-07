@@ -4,7 +4,7 @@ IFS=$'\n\t'
 
 function main() {
     printf '%-14s  %-8s  %-8s\n' '' 'parsed' 'Unihan'
-    for kind in 'kHanyuPinyin' 'kMandarin' 'kHanyuPinlu' 'kXHC1983'
+    for kind in 'kCantonese'
     do
         unihanCount=$(less Unihan_Readings.txt |grep -v '^#' |grep -c "$kind")
         parsedCount=$(less "$kind".txt | grep -c "")
